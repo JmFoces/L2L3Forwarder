@@ -68,7 +68,7 @@ void SwitchSocket::handle_packet(const boost::system::error_code& error,
 	}catch (std::out_of_range &e){
 		BOOST_LOG_TRIVIAL(debug) << ifname << " Unknown MAC-PORT " ;
 		BOOST_FOREACH(SwitchSocket* element, brothers) {
-			forward_current(element);
+			if (element != this)forward_current(element);
 		}
 	}
 
