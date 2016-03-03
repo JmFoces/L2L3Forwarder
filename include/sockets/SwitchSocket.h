@@ -7,14 +7,17 @@
 
 #ifndef SWITCHSOCKET_H_
 #define SWITCHSOCKET_H_
-#include <sockets/L2Socket.h>
+#include <L2SockHandler.h>
 
-class SwitchSocket :public L2Socket{
+class SwitchSocket :public L2SockHandler{
 public:
 	static list<SwitchSocket*> brothers;
 	SwitchSocket(string ifname,boost::asio::io_service* io_service);
 	virtual ~SwitchSocket();
 	void forward_current(SwitchSocket * to);
+	void received_packet(
+		const boost::system::error_code& error,
+		size_t bytes_transferred);
 	void handle_packet(
 			const boost::system::error_code& error,
 			size_t bytes_transferred);
