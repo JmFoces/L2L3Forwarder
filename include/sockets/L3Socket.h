@@ -18,6 +18,10 @@
 //net/ipv4/arp.c kmode util arp methods
 
 class RoutingTable;
+/**
+ * Represents a Network Layer socket.
+ * Its main responsibility is to handle packets coming from lower layer sockets, L2Socket.
+ */
 
 class L3Socket :public L2Socket{
 public:

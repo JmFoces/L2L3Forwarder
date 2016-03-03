@@ -41,5 +41,6 @@ boost::format format_mac_addr(uint8_t* mac_addr);
 boost::format format_ip_addr(uint8_t* ip_addr);
 boost::format format_ip_addr(char* ip_addr);
 bool compare_arr(uint8_t* first,uint8_t *second,size_t size);
+void call_ios(boost::asio::io_service* ios);
 
 #endif

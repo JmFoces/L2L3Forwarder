@@ -133,9 +133,6 @@ ether_header L2Socket::build_header(const char* packet){
 }
 
 bool L2Socket::packet_for_me(ether_header eth_hdr){
-	//hexa_print((unsigned char*) eth_hdr.ether_dhost, 6);
-	//hexa_print((unsigned char*) mac_addr, 6);
-
 	if(compare_arr(eth_hdr.ether_shost,mac_addr,ETH_ALEN)){
 		BOOST_LOG_TRIVIAL(trace) << "packet comes from my interface drop it";
 		return false;
