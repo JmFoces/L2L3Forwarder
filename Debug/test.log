@@ -1,0 +1,54 @@
+putting event
+putting event
+packet received 98
+Destination MAC \xbc\xf6\x85\x67\x67\x89
+bcf685676789
+Source MAC \x74\xd0\x2b\x26\xb0\x2a
+74d02b26b02a
+MAC TABLE: 
+MAC:  74d02b26b02a ON ifaces: eth1, 
+putting event
+packet received 62
+Destination MAC \x74\xd0\x2b\x26\xb0\x2a
+74d02b26b02a
+Source MAC \xbc\xf6\x85\x67\x67\x89
+bcf685676789
+MAC TABLE: 
+MAC:  74d02b26b02a ON ifaces: eth1, 
+MAC:  bcf685676789 ON ifaces: eth1, 
+putting event
+packet received 62
+Destination MAC \xbc\xf6\x85\x67\x67\x89
+bcf685676789
+Source MAC \x74\xd0\x2b\x26\xb0\x2a
+74d02b26b02a
+MAC TABLE: 
+MAC:  74d02b26b02a ON ifaces: eth1, 
+MAC:  bcf685676789 ON ifaces: eth1, 
+putting event
+packet received 62
+Destination MAC \x74\xd0\x2b\x26\xb0\x2a
+74d02b26b02a
+Source MAC \xbc\xf6\x85\x67\x67\x89
+bcf685676789
+MAC TABLE: 
+MAC:  74d02b26b02a ON ifaces: eth1, 
+MAC:  bcf685676789 ON ifaces: eth1, 
+putting event
+packet received 62
+Destination MAC \xbc\xf6\x85\x67\x67\x89
+bcf685676789
+Source MAC \x74\xd0\x2b\x26\xb0\x2a
+74d02b26b02a
+MAC TABLE: 
+MAC:  74d02b26b02a ON ifaces: eth1, 
+MAC:  bcf685676789 ON ifaces: eth1, 
+putting event
+packet received 62
+Destination MAC \x74\xd0\x2b\x26\xb0\x2a
+74d02b26b02a
+Source MAC \xbc\xf6\x85\x67\x67\x89
+bcf685676789
+MAC TABLE: 
+MAC:  74d02b26b02a ON ifaces: eth1, 
+MAC:  bcf685676789 ON ifaces: eth1, 
