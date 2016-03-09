@@ -65,10 +65,15 @@ void UserInterface::run_switch(){
 		std::cin >> op_mode;
 		switch(op_mode){
 			case OP_CODE_SHOW_TABLES:
-				for (mac_table::iterator mac_iface_pair=bridge_table.begin();mac_iface_pair!=bridge_table.end();mac_iface_pair++){
-					std::cout << "MAC " << format_mac_addr((uint8_t*) &mac_iface_pair->first);
-					std::cout << " On port " << mac_iface_pair->second->ifname;
-					std::cout << std::endl;
+				if (!SwitchSocket::bridge_table) {
+					std::cout << "Not initialized. Add an interface first.";
+					break;
+				}
+				std::cout << "Bridge table "  << SwitchSocket::get_bridge_table() << " Of size "<< SwitchSocket::get_bridge_table()->size()  << std::endl;
+				for ( mac_table::const_iterator brtable_it = SwitchSocket::bridge_table->cbegin();
+						brtable_it != SwitchSocket::bridge_table->cend(); brtable_it++){
+					BOOST_LOG_TRIVIAL(debug) << "MAC:  " << brtable_it->first << " ON iface: " << brtable_it->second->ifname;
+					std::cout << "MAC:  " << brtable_it->first << " ON iface: " << brtable_it->second->ifname<< std::endl;
 				}
 				break;
 			case OP_CODE_ADD_IFACE:

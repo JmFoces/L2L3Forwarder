@@ -7,10 +7,12 @@
 
 #ifndef SWITCHSOCKET_H_
 #define SWITCHSOCKET_H_
-#include <L2SockHandler.h>
+#include <sockets/L2Socket.h>
 
-class SwitchSocket :public L2SockHandler{
+
+class SwitchSocket :public L2Socket{
 public:
+	static mac_table *bridge_table;
 	static list<SwitchSocket*> brothers;
 	SwitchSocket(string ifname,boost::asio::io_service* io_service);
 	virtual ~SwitchSocket();
@@ -21,7 +23,10 @@ public:
 	void handle_packet(
 			const boost::system::error_code& error,
 			size_t bytes_transferred);
+	inline static mac_table* get_bridge_table(){
+		return bridge_table;
+	}
 };
-typedef std::map<uint64_t,SwitchSocket*> mac_table;
-static mac_table bridge_table;
+
+
 #endif /* SWITCHSOCKET_H_ */

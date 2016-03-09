@@ -6,7 +6,7 @@
  */
 
 
-
+#pragma once
 #ifndef _MISC
 #define _MISC
 
@@ -23,6 +23,9 @@
 
 typedef boost::asio::generic::raw_protocol raw_protocol_t;
 typedef boost::asio::generic::basic_endpoint<raw_protocol_t> raw_endpoint_t;
+class SwitchSocket;
+typedef std::map<uint64_t,SwitchSocket*> mac_table;
+
 
 static const uint16_t ETH_MTU = ETHERMTU;
 static const uint8_t ETH_HDR_MAX_LEN = ETH_HLEN; //Without considering VLAN Tagging.

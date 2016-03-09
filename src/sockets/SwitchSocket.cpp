@@ -7,9 +7,11 @@
 
 #include <sockets/SwitchSocket.h>
 list<SwitchSocket*> SwitchSocket::brothers;
+mac_table* SwitchSocket::bridge_table = NULL;
+
 SwitchSocket::SwitchSocket(string ifname,boost::asio::io_service* io_service):
 	L2Socket(ifname,io_service) {
-
+	if (!bridge_table) bridge_table = new mac_table();
 	brothers.push_back(this);
 }
 
@@ -48,21 +50,21 @@ void SwitchSocket::handle_packet(const boost::system::error_code& error,
 	uint64_t source_mac = char_to_mac((unsigned char*)data);
 	BOOST_LOG_TRIVIAL(debug) << source_mac << std::endl;
 	//Inserting inside bridge table.
-	bridge_table[source_mac] = this;
+	BOOST_LOG_TRIVIAL(debug) << "BRIDGE TABLE REF " << bridge_table << "of size " << bridge_table->size();
+	(*bridge_table)[source_mac] = this;
 	//Releasing temporal data.
 	delete data;
-
 	BOOST_LOG_TRIVIAL(debug) << ifname << " BUFF SIZE " << buffer.size();
 	BOOST_LOG_TRIVIAL(debug) << ifname << " MAC TABLE: " ;
 	//Deciding forwarding.
-	for ( mac_table::const_iterator brtable_it = bridge_table.begin();
-			brtable_it != bridge_table.end(); brtable_it++){
+	for ( mac_table::const_iterator brtable_it = bridge_table->cbegin();
+			brtable_it != bridge_table->cend(); brtable_it++){
 		BOOST_LOG_TRIVIAL(debug) << "MAC:  " << brtable_it->first << " ON iface: " << brtable_it->second->ifname;
 	}
 	// Calling forwarding.
 
 	try{
-		SwitchSocket* knownhandler = bridge_table.at(destination_mac);
+		SwitchSocket* knownhandler = bridge_table->at(destination_mac);
 		BOOST_LOG_TRIVIAL(debug) <<  "known MAC-PORT ";
 		forward_current(knownhandler);
 	}catch (std::out_of_range &e){
