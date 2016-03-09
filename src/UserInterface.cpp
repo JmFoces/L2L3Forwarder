@@ -8,6 +8,7 @@
 #include "UserInterface.h"
 #include <boost/foreach.hpp>
 #include <sockets/SwitchSocket.h>
+#include <sockets/L3Socket.h>
 #include <cstddef>
 #include <boost/thread.hpp>
 UserInterface::UserInterface() {
@@ -36,7 +37,47 @@ void UserInterface::run(){
 	}
 }
 void UserInterface::run_router(){
-	std::cout << "Not implemented yet!!!" << std::endl;
+	boost::asio::io_service *io_service = new boost::asio::io_service;
+	char op_mode = '0';
+		std::list<SwitchSocket*> switch_ports;
+
+		while(op_mode != OP_CODE_QUIT){
+			std::cout << "Introduce the operation you want to perform: \n a-> Add an interface \n t->Show ARP and routing tablesgm" << std::endl;
+			std::cin >> op_mode;
+
+			switch(op_mode){
+				case OP_CODE_SHOW_TABLES:
+					if (!SwitchSocket::bridge_table) {
+						std::cout << "Not initialized. Add an interface first.";
+						break;
+					}
+					break;
+				case OP_CODE_ADD_IFACE:
+					std::cout << " Please insert interface name" << std::endl;
+					std::string if_name;
+					std::cin >> if_name;
+					L3Socket *new_port = new L3Socket(if_name,io_service);
+					std::cout << " Please insert interface IP Address" << std::endl;
+					std::string ip_addr;
+					std::cin >> ip_addr;
+					std::cout << " Please insert interface IP Netmask (255.255.255.0)" << std::endl;
+					std::string ip_net;
+					std::cin >> ip_net;
+					new_port->add_ip_addr((unsigned char*) ip_addr.c_str(),(unsigned char*) ip_net.c_str());
+					new_port->start();
+					boost::thread *routing_thread = new boost::thread(&call_ios,io_service);
+					routing_thread->detach();
+					delete routing_thread;
+					break;
+			}
+		}
+		std::cout << " Bye!" << std::endl;
+		io_service->stop();
+
+		delete io_service;
+		BOOST_FOREACH(SwitchSocket* sock, switch_ports){
+			delete sock;
+		}
 	/*init_logging(boost::log::trivial::trace);
 	boost::asio::io_service *io_service = new boost::asio::io_service;
 	L3Socket vmnet1("vmnet1",io_service);
@@ -59,10 +100,11 @@ void UserInterface::run_switch(){
 	boost::asio::io_service *io_service = new boost::asio::io_service;
 	char op_mode = '0';
 	std::list<SwitchSocket*> switch_ports;
-
+	boost::thread* switch_thread;
 	while(op_mode != OP_CODE_QUIT){
 		std::cout << "Introduce the operation you want to perform: \n a-> Add an interface \n t->Show bridge table" << std::endl;
 		std::cin >> op_mode;
+
 		switch(op_mode){
 			case OP_CODE_SHOW_TABLES:
 				if (!SwitchSocket::bridge_table) {
@@ -82,10 +124,9 @@ void UserInterface::run_switch(){
 				std::cin >> if_name;
 				SwitchSocket *new_port = new SwitchSocket(if_name,io_service);
 				new_port->start();
-				boost::thread* th0 = new boost::thread(&call_ios,io_service);
-				th0->detach();
-				delete th0;
-
+				if(!switch_thread) switch_thread = new boost::thread(&call_ios,io_service);
+				switch_thread->detach();
+				delete switch_thread;
 				break;
 		}
 	}
