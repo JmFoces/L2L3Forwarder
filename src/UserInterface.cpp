@@ -42,7 +42,7 @@ void UserInterface::run_router(){
 		std::list<SwitchSocket*> switch_ports;
 
 		while(op_mode != OP_CODE_QUIT){
-			std::cout << "Introduce the operation you want to perform: \n a-> Add an interface \n t->Show ARP and routing tablesgm" << std::endl;
+			std::cout << "Introduce the operation that you want to perform: \n a-> Add an interface \n t->Show ARP and routing tablesgm" << std::endl;
 			std::cin >> op_mode;
 
 			switch(op_mode){
