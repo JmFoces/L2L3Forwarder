@@ -9,6 +9,8 @@
 #define USERINTERFACE_H_
 #include <iostream>
 #include <boost/foreach.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 class UserInterface {
 public:
 	static const char OP_MODE_ROUTER='r';
@@ -19,6 +21,8 @@ public:
 	UserInterface();
 	virtual ~UserInterface();
 	void run();
+	void load_router(boost::property_tree::ptree pt);
+	void load_switch(boost::property_tree::ptree pt);
 	void run_switch();
 	void run_router();
 

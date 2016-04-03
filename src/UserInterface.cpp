@@ -11,6 +11,9 @@
 #include <sockets/L3Socket.h>
 #include <cstddef>
 #include <boost/thread.hpp>
+#include <fstream>
+
+
 UserInterface::UserInterface() {
 	// TODO Auto-generated constructor stub
 
@@ -22,19 +25,54 @@ UserInterface::~UserInterface() {
 
 void UserInterface::run(){
 
+	std::fstream config("./config.json",ios_base::in);
 	char op_mode = '0';
-	while(true){
-		std::cout << "Introduce the operation mode: \n r-> IPv4 Router \n s->Ethernet Switch";
-		std::cin >> op_mode;
+	if (config.fail() != 0){
+
+		while(true){
+			std::cout << "No config.json file found. Please introduce the operation mode: \n r-> IPv4 Router \n s->Ethernet Switch";
+			std::cin >> op_mode;
+			switch(op_mode){
+			case OP_MODE_ROUTER:
+				run_router();
+				break;
+			case OP_MODE_SWITCH:
+				run_switch();
+				break;
+			}
+		}
+	}else{
+		boost::property_tree::ptree pt;
+		boost::property_tree::read_json(config,pt);
+		op_mode = *(std::string(pt.get_child("mode").data()).c_str());
 		switch(op_mode){
 		case OP_MODE_ROUTER:
-			run_router();
+			load_router(pt);
 			break;
 		case OP_MODE_SWITCH:
-			run_switch();
+			load_switch(pt);
 			break;
 		}
 	}
+}
+void UserInterface::load_router(boost::property_tree::ptree pt){
+	boost::asio::io_service *io_service = new boost::asio::io_service;
+	BOOST_FOREACH(boost::property_tree::ptree::value_type &v, pt.get_child("interfaces"))
+	{
+		std::string if_name = v.first;
+		L3Socket *new_port = new L3Socket(if_name,io_service);
+		std::string ip_addr = v.second.get_child("address").data();
+		std::string ip_net = v.second.get_child("netmask").data();
+		new_port->add_ip_addr((unsigned char*) ip_addr.c_str(),(unsigned char*) ip_net.c_str());
+		new_port->start();
+		boost::thread *routing_thread = new boost::thread(&call_ios,io_service);
+		routing_thread->detach();
+		delete routing_thread;
+	}
+	run_router();
+}
+void UserInterface::load_switch(boost::property_tree::ptree pt){
+
 }
 void UserInterface::run_router(){
 	boost::asio::io_service *io_service = new boost::asio::io_service;
@@ -42,7 +80,7 @@ void UserInterface::run_router(){
 		std::list<SwitchSocket*> switch_ports;
 
 		while(op_mode != OP_CODE_QUIT){
-			std::cout << "Introduce the operation that you want to perform: \n a-> Add an interface \n t->Show ARP and routing tablesgm" << std::endl;
+			std::cout << "Introduce the operation that you want to perform: \n a-> Add an interface \n t->Show ARP and routing table" << std::endl;
 			std::cin >> op_mode;
 
 			switch(op_mode){
@@ -78,23 +116,6 @@ void UserInterface::run_router(){
 		BOOST_FOREACH(SwitchSocket* sock, switch_ports){
 			delete sock;
 		}
-	/*init_logging(boost::log::trivial::trace);
-	boost::asio::io_service *io_service = new boost::asio::io_service;
-	L3Socket vmnet1("vmnet1",io_service);
-	L3Socket vmnet2("vmnet2",io_service);
-	vmnet1.add_ip_addr((unsigned char*)"192.168.10.1",(unsigned char*)"255.255.255.0");
-	vmnet2.add_ip_addr((unsigned char*)"192.168.11.1",(unsigned char*)"255.255.255.0");
-	vmnet1.start();
-	vmnet2.start();
-	boost::thread* th0 = new boost::thread(&call_ios,io_service);
-	boost::thread* th1 = new boost::thread(&call_ios,io_service);
-
-	int stop;
-	cin>> stop;
-	io_service->stop();
-	delete io_service;
-	delete th0;
-	delete th1;*/
 }
 void UserInterface::run_switch(){
 	boost::asio::io_service *io_service = new boost::asio::io_service;
