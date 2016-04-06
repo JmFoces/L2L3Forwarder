@@ -38,7 +38,7 @@ public:
 	raw_protocol_t::socket l2socket;
 	//Methods
 	/**
-	 * L2SockHanlder Constructor
+	 * L2Socket Constructor
 	 * Wakes up interface given by name in promiscuous mode.
 	 * @param ifname string with name like eth1
 	 * @param io_service* pointer to the io_service that will manage the underlying socket.
@@ -46,6 +46,7 @@ public:
 	L2Socket(string ifname,boost::asio::io_service* io_service);
 	/**
 	 * L2Socket destructor
+	 * Pending to implement correct release, disable promiscuous mode etc...
 	 */
 	virtual ~L2Socket();
 	/**
