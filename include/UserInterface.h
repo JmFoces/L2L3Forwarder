@@ -11,6 +11,13 @@
 #include <boost/foreach.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
+#include <sockets/SwitchSocket.h>
+#include <sockets/L3Socket.h>
+#include <cstddef>
+#include <boost/thread.hpp>
+#include <fstream>
+
 class UserInterface {
 public:
 	static const char OP_MODE_ROUTER='r';
@@ -23,8 +30,8 @@ public:
 	void run();
 	void load_router(boost::property_tree::ptree pt);
 	void load_switch(boost::property_tree::ptree pt);
-	void run_switch();
-	void run_router();
+	void run_switch(boost::asio::io_service *io_service, boost::thread* switch_thread);
+	void run_router(boost::asio::io_service *io_service);
 
 };
 

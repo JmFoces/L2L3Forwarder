@@ -6,12 +6,7 @@
  */
 
 #include "UserInterface.h"
-#include <boost/foreach.hpp>
-#include <sockets/SwitchSocket.h>
-#include <sockets/L3Socket.h>
-#include <cstddef>
-#include <boost/thread.hpp>
-#include <fstream>
+
 
 
 UserInterface::UserInterface() {
@@ -32,12 +27,14 @@ void UserInterface::run(){
 		while(true){
 			std::cout << "No config.json file found. Please introduce the operation mode: \n r-> IPv4 Router \n s->Ethernet Switch";
 			std::cin >> op_mode;
+			boost::asio::io_service *io_service = new boost::asio::io_service;
 			switch(op_mode){
 			case OP_MODE_ROUTER:
-				run_router();
+				run_router(io_service);
 				break;
 			case OP_MODE_SWITCH:
-				run_switch();
+
+				run_switch(io_service,NULL);
 				break;
 			}
 		}
@@ -47,9 +44,11 @@ void UserInterface::run(){
 		op_mode = *(std::string(pt.get_child("mode").data()).c_str());
 		switch(op_mode){
 		case OP_MODE_ROUTER:
+			std::cout << "LOADING Router configuration" << std::endl;
 			load_router(pt);
 			break;
 		case OP_MODE_SWITCH:
+			std::cout << "LOADING Switch configuration" << std::endl;
 			load_switch(pt);
 			break;
 		}
@@ -69,13 +68,33 @@ void UserInterface::load_router(boost::property_tree::ptree pt){
 		routing_thread->detach();
 		delete routing_thread;
 	}
-	run_router();
+	run_router(io_service);
 }
 void UserInterface::load_switch(boost::property_tree::ptree pt){
-
-}
-void UserInterface::run_router(){
 	boost::asio::io_service *io_service = new boost::asio::io_service;
+	boost::thread* switch_thread = NULL;
+	BOOST_FOREACH(boost::property_tree::ptree::value_type &v, pt.get_child("interfaces"))
+	{
+		std::string if_name = v.second.data();
+		std::cout << "INIT " << if_name <<std::endl;
+		SwitchSocket *new_port = new SwitchSocket(if_name,io_service);
+		new_port->start();
+		std::cout << "Created Switch port " << if_name <<std::endl;
+		if(switch_thread == NULL){
+			std::cout << "Started Switch Thread " << if_name <<std::endl;
+			switch_thread = new boost::thread(&call_ios,io_service);
+			switch_thread->detach();
+			delete switch_thread;
+		}
+		//Let the pointer initialized. Its used as flag to state that there is one thread running already.
+	}
+	run_switch(io_service,switch_thread);
+}
+void UserInterface::run_router(boost::asio::io_service *io_service){
+	if(io_service == NULL){
+			std::cout << "Give me an IOS" << std::endl;
+			return;
+		}
 	char op_mode = '0';
 		std::list<SwitchSocket*> switch_ports;
 
@@ -117,11 +136,13 @@ void UserInterface::run_router(){
 			delete sock;
 		}
 }
-void UserInterface::run_switch(){
-	boost::asio::io_service *io_service = new boost::asio::io_service;
+void UserInterface::run_switch(boost::asio::io_service *io_service,boost::thread *switch_thread){
+	if(io_service == NULL){
+		std::cout << "Give me an IOS" << std::endl;
+		return;
+	}
 	char op_mode = '0';
 	std::list<SwitchSocket*> switch_ports;
-	boost::thread* switch_thread;
 	while(op_mode != OP_CODE_QUIT){
 		std::cout << "Introduce the operation you want to perform: \n a-> Add an interface \n t->Show bridge table" << std::endl;
 		std::cin >> op_mode;
