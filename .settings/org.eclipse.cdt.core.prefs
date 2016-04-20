@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1930935987/PATH/delimiter=\:
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1930935987/PATH/operation=append
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1930935987/PATH/value=/usr/local/bin\:/usr/bin\:/bin\:/usr/local/games\:/usr/games\:/usr/local/crystax-ndk\:/usr/local/android-sdk/platform-tools/\:/usr/local/android-sdk/\:/usr/local/android-sdk/tools/\:/usr/local/eclipse/
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1930935987/append=true
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1930935987/appendContributed=true
