@@ -1,26 +1,23 @@
 src/protocol_handlers/ARPProtocolHandler.o: \
  ../src/protocol_handlers/ARPProtocolHandler.cpp \
- /home/cfv/git/L2L3Forwarder/include/protocol_handlers/ARPProtocolHandler.h \
- /home/cfv/git/L2L3Forwarder/include/sockets/L3Socket.h \
- /home/cfv/git/L2L3Forwarder/include/sockets/L2Socket.h \
- /home/cfv/git/L2L3Forwarder/include/misc.h \
- /home/cfv/git/L2L3Forwarder/include/protocol_handlers/IPProtocolHandler.h \
- /home/cfv/git/L2L3Forwarder/include/protocol_handlers/ProtocolHandler.h \
- /home/cfv/git/L2L3Forwarder/include/tables/RoutingTable.h \
- /home/cfv/git/L2L3Forwarder/include/tables/ARPTable.h
+ ../include/protocol_handlers/ARPProtocolHandler.h \
+ ../include/sockets/L3Socket.h ../include/sockets/L2Socket.h \
+ ../include/misc.h ../include/protocol_handlers/IPProtocolHandler.h \
+ ../include/protocol_handlers/ProtocolHandler.h \
+ ../include/tables/RoutingTable.h ../include/tables/ARPTable.h
 
-/home/cfv/git/L2L3Forwarder/include/protocol_handlers/ARPProtocolHandler.h:
+../include/protocol_handlers/ARPProtocolHandler.h:
 
-/home/cfv/git/L2L3Forwarder/include/sockets/L3Socket.h:
+../include/sockets/L3Socket.h:
 
-/home/cfv/git/L2L3Forwarder/include/sockets/L2Socket.h:
+../include/sockets/L2Socket.h:
 
-/home/cfv/git/L2L3Forwarder/include/misc.h:
+../include/misc.h:
 
-/home/cfv/git/L2L3Forwarder/include/protocol_handlers/IPProtocolHandler.h:
+../include/protocol_handlers/IPProtocolHandler.h:
 
-/home/cfv/git/L2L3Forwarder/include/protocol_handlers/ProtocolHandler.h:
+../include/protocol_handlers/ProtocolHandler.h:
 
-/home/cfv/git/L2L3Forwarder/include/tables/RoutingTable.h:
+../include/tables/RoutingTable.h:
 
-/home/cfv/git/L2L3Forwarder/include/tables/ARPTable.h:
+../include/tables/ARPTable.h:
