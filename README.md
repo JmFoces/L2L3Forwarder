@@ -15,7 +15,7 @@ The main objective is to give a simple, not performance oriented, implementation
 	apt-get install libboost-all-dev linux-headers-`uname -r | sed s/"\(.*\)-"//` gcc g++ make git
 	Then you can just
 	git clone https://github.com/jmfoces/L2L3Forwarder.git
-	cd L2L3Forwarder
+	cd L2L3Forwarder/Debug
 	make clean && make all
 	Edit your config.json to setup the interfaces you want to use and GOOO!
 	./L2L3Forwarder
