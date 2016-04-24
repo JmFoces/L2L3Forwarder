@@ -41,7 +41,7 @@ void IPProtocolHandler::add_ip_addr(in_addr_t ip, in_addr_t netmask,L3Socket* ip
 unsigned short IPProtocolHandler::cksum(ip* ip_header,int len){
     long sum = 0;  /* assume 32 bit long, 16 bit short */
     unsigned short* ptr = (unsigned short*)ip_header;
-    BOOST_LOG_TRIVIAL(trace) << "Calculus of checksum ";
+    BOOST_LOG_TRIVIAL(trace) << "Doing checksum ";
     BOOST_LOG_TRIVIAL(trace) << hexa_print((const unsigned char* ) ip_header,len);
     while(len > 1){
     	BOOST_LOG_TRIVIAL(trace)

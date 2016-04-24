@@ -1,0 +1,4 @@
+{
+	"mode":"s",
+	"interfaces":["vmnet1","vmnet2","vmnet3"]
+}
